@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function ViewPage() {
+function ViewContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const url = searchParams.get('url');
@@ -136,6 +136,18 @@ export default function ViewPage() {
     );
 }
 
+export default function ViewPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex flex-col items-center justify-center min-h-screen">
+                <div className="spinner"></div>
+            </div>
+        }>
+            <ViewContent />
+        </Suspense>
+    );
+}
+
 // Helper function to organize comments into a hierarchy
 function organizeComments(comments) {
     // 1. Create Nodes with unique IDs (using index)
@@ -232,4 +244,3 @@ function CommentItem({ comment, isChild = false }) {
         </div>
     );
 }
-
